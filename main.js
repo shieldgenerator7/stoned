@@ -272,6 +272,10 @@ function Player(name, id){
 		that.pony.acceptMoveCode(moveCode);
 	}
 	
+	that.teleport = function(tx, ty){
+		that.pony.teleport((tx - tcx)/canvasRatio,(ty - 0)/canvasRatio);
+	}
+	
 	that.update = function(){
 		that.pony.update();
 	}
@@ -329,6 +333,11 @@ function Pony(name,initFunction){//Name of pony, also used for getting image. Th
 	that.sound = new Audio(PONY_DIR.concat(name,".mp3"));
 	
 	that.beamProjectile = null;//used to reference the beam projectile that makes the character immobile
+	
+	that.teleport = function(tx, ty){
+		//future code: check for collisions
+		that.setPosition(tx-that.image.width/2,ty-that.image.height/2);
+	}
 			
 	that.setPosition = function(x, y){
 		that.X = x;
@@ -2106,6 +2115,7 @@ document.addEventListener('mousedown', function(e){
 });
 
 document.addEventListener('mouseup', function(e){
+		player1.teleport(e.x,e.y);
 		playerFiring = false;
 		playerFired = false;
 });
@@ -2127,6 +2137,7 @@ c.addEventListener('touchstart', function(e){
 
 c.addEventListener('touchend', function(e){
 		e.preventDefault();
+		player1.teleport(mouseX, mouseY);
 		playerFiring = false;
 		playerFired = false;
 }, false);
